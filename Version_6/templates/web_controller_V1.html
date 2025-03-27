@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WebSocket Button</title>
+</head>
+<body>
+    <h1>WebSocket Example</h1>
+    <button id="forward" onclick="sendMessage('vertical', 0)">Forward</button>
+    <button id="stop" onclick="sendMessage('vertical', 1)">Stop</button>
+    <button id="backward" onclick="sendMessage('vertical', 2)">Backward</button>
+    <button id="left" onclick="sendMessage('horizontal', 0)">Left</button>
+    <button id="Mid" onclick="sendMessage('horizontal', 1)">Mid</button>
+    <button id="right" onclick="sendMessage('horizontal', 2)">Right</button>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.5.0/socket.io.js"></script>
+    <script>
+        const socket = io();
+
+        socket.on('connect', () => {
+            console.log('Connected to WebSocket server');
+        });
+
+        function sendMessage(button, value) {
+            console.log(button, value);
+            socket.emit('data_sent',
+            {
+                [button]: value,  // Dynamically set the key based on the button parameter
+            });
+        }
+
+        socket.on('data_received', (data) => {
+            console.log("Received from server:", data);
+        });
+    </script>
+</body>
+</html>
